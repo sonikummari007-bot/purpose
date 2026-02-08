@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Purpose Day Surprise — For Nisuuu 💍</title>
+
+  <!-- Cursive-ish (built-in safe stack). If you want Google font later, tell me. -->
+  <style>
+    :root{
+      --bg1:#3a0016;
+      --bg2:#7a0030;
+      --bg3:#ff2b6a;
+
+      --glass: rgba(255,255,255,.10);
+      --glass2: rgba(255,255,255,.14);
+      --stroke: rgba(255,255,255,.18);
+
+      --txt: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+
+      --pink:#ff4d88;
+      --rose:#ff2b6a;
+      --gold:#ffd36a;
+      --shadow: 0 20px 80px rgba(0,0,0,.35);
+      --shadow2: 0 12px 40px rgba(0,0,0,.25);
+
+      --radius: 26px;
+      --radius2: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; color:var(--txt); overflow:hidden; }
+    body{
+      background:
+        radial-gradient(1200px 800px at 20% 20%, rgba(255,80,140,.22), transparent 60%),
+        radial-gradient(900px 700px at 80% 10%, rgba(255,210,120,.12), transparent 55%),
+        radial-gradient(1200px 900px at 70% 90%, rgba(255,43,106,.25), transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2) 55%, var(--bg3));
+    }
+
+    /* Cute floating emojis background */
+    .floaty{
+      position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0;
+    }
+    .floaty .e{
+      position:absolute;
+      font-size:18px;
+      opacity:.65;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,.25));
+      animation: drift linear infinite;
+    }
+    @keyframes drift{
+      0%{ transform: translateY(110vh) translateX(0) rotate(0deg); opacity:0; }
+      10%{ opacity:.75; }
+      100%{ transform: translateY(-20vh) translateX(var(--dx)) rotate(360deg); opacity:0; }
+    }
+
+    /* Rose petal falling */
+    .petals{
+      position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:3;
+    }
+    .petal{
+      position:absolute;
+      top:-10vh;
+      font-size:22px;
+      opacity:.9;
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,.28));
+      animation: fall linear forwards;
+      will-change: transform, top;
+    }
+    @keyframes fall{
+      0%   { transform: translateX(0) rotate(0deg); top:-12vh; opacity:0; }
+      10%  { opacity:.95; }
+      100% { transform: translateX(var(--x)) rotate(var(--r)); top:110vh; opacity:0; }
+    }
+
+    /* Main wrapper */
+    .wrap{
+      position:relative;
+      z-index:5;
+      height:100%;
+      display:grid;
+      place-items:center;
+      padding:22px;
+    }
+
+    .card{
+      width:min(980px, 92vw);
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.08));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.10);
+    }
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:9px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+      font-weight:700;
+      letter-spacing:.2px;
+      font-size:13.5px;
+    }
+    .dot{ width:9px; height:9px; border-radius:50%; background: var(--gold); box-shadow: 0 0 0 5px rgba(255,211,106,.16); }
+    .dot2{ background: #ff6aa0; box-shadow: 0 0 0 5px rgba(255,106,160,.16); }
+
+    /* Screens */
+    .screen{
+      min-height:520px;
+      display:grid;
+      place-items:center;
+      padding:34px 18px 40px;
+    }
+    .hidden{ display:none !important; }
+
+    /* Countdown box */
+    .centerBox{
+      width:min(620px, 92%);
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      box-shadow: var(--shadow2);
+      padding:28px 18px;
+      text-align:center;
+      position:relative;
+    }
+    .bigNum{
+      font-size:92px;
+      line-height:1;
+      margin:10px 0 6px;
+      font-weight:900;
+      letter-spacing: -2px;
+      text-shadow: 0 18px 50px rgba(0,0,0,.35);
+    }
+    .sub{
+      color:var(--muted);
+      font-weight:600;
+      letter-spacing:.2px;
+    }
+
+    /* Sorry text typing glow */
+    .sorryWrap{
+      display:grid;
+      gap:12px;
+      place-items:center;
+    }
+    .sorryTitle{
+      font-size: clamp(30px, 4vw, 54px);
+      font-weight: 900;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 18px 60px rgba(0,0,0,.25);
+    }
+    .typingGlow{
+      display:inline-block;
+      white-space:nowrap;
+      overflow:hidden;
+      border-right: 3px solid rgba(255,255,255,.85);
+      filter: drop-shadow(0 0 14px rgba(255,70,140,.55));
+      text-shadow:
+        0 0 12px rgba(255,70,140,.55),
+        0 0 24px rgba(255,43,106,.35);
+      animation: caret 700ms infinite;
+    }
+    @keyframes caret{
+      0%,49%{ border-right-color: rgba(255,255,255,.85); }
+      50%,100%{ border-right-color: transparent; }
+    }
+
+    /* Final page layout */
+    .finalGrid{
+      width:min(980px, 94%);
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width: 860px){
+      .finalGrid{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      position:relative;
+    }
+    .panelHead{
+      padding:14px 14px 10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      border-bottom:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.10);
+      font-weight:800;
+    }
+    .panelHead small{ font-weight:700; color:rgba(255,255,255,.75); }
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      font-weight:800;
+      font-size:12.5px;
+    }
+
+    .photoFrame{
+      padding:14px;
+    }
+    .photo{
+      width:100%;
+      height: 380px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.25);
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      position:relative;
+    }
+    /* IMPORTANT: full photo visible, no cropping */
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit: contain;      /* <-- no cutting */
+      object-position:center;
+      display:block;
+      background: rgba(0,0,0,.25);
+    }
+    .photoHint{
+      position:absolute;
+      left:12px; bottom:10px;
+      font-size:12px;
+      font-weight:800;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.16);
+    }
+
+    .btnRow{
+      display:flex;
+      gap:12px;
+      padding:0 14px 16px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      appearance:none;
+      border:0;
+      cursor:pointer;
+      padding:12px 16px;
+      border-radius: 14px;
+      font-weight:900;
+      letter-spacing:.2px;
+      color: rgba(255,255,255,.92);
+      background: linear-gradient(135deg, rgba(255,90,150,.95), rgba(255,43,106,.92));
+      box-shadow: 0 16px 44px rgba(255,43,106,.22);
+      border:1px solid rgba(255,255,255,.18);
+      transition: transform .12s ease, filter .12s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.04); }
+    .btn.secondary{
+      background: rgba(255,255,255,.10);
+      box-shadow: 0 14px 34px rgba(0,0,0,.18);
+    }
+
+    .sideText{
+      padding:16px 16px 18px;
+      display:grid;
+      gap:12px;
+    }
+    .bigLine{
+      font-size: clamp(28px, 3.4vw, 44px);
+      font-weight: 950;
+      line-height:1.05;
+      letter-spacing:-.6px;
+      text-shadow: 0 18px 60px rgba(0,0,0,.30);
+    }
+    .mini{
+      color: rgba(255,255,255,.78);
+      font-weight:700;
+      line-height:1.5;
+      background: rgba(0,0,0,.10);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      padding:14px;
+    }
+
+    /* Letter Modal */
+    .modal{
+      position:fixed; inset:0;
+      display:none;
+      place-items:center;
+      background: rgba(0,0,0,.55);
+      z-index:50;
+      padding:18px;
+    }
+    .modal.show{ display:grid; }
+
+    .letter{
+      width:min(920px, 94vw);
+      height:min(78vh, 720px);
+      border-radius: 22px;
+      overflow:hidden;
+      background: #f7f3ef;
+      box-shadow: 0 26px 110px rgba(0,0,0,.45);
+      position:relative;
+      display:grid;
+      grid-template-rows: auto 1fr;
+      border:1px solid rgba(0,0,0,.10);
+    }
+    .letterBar{
+      background: #ffffff;
+      border-bottom:1px solid rgba(0,0,0,.08);
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .letterPill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:9px 12px;
+      border-radius: 999px;
+      font-weight:900;
+      color: #2c2c2c;
+      background: #ffe2ea;
+      border:1px solid rgba(0,0,0,.08);
+    }
+    .closeX{
+      width:38px; height:38px;
+      border-radius: 12px;
+      border:1px solid rgba(0,0,0,.10);
+      background: #fff;
+      cursor:pointer;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .paper{
+      position:relative;
+      padding:26px 24px 26px;
+      overflow:auto;
+      background:
+        linear-gradient(#f7f3ef, #f7f3ef) padding-box,
+        linear-gradient(transparent 31px, rgba(0,0,0,.06) 32px) border-box;
+      background-size: 100% 100%, 100% 32px;
+      background-attachment: local;
+    }
+    .paper:before{
+      content:"";
+      position:absolute;
+      top:0; bottom:0; left:22px;
+      width:2px;
+      background: rgba(255,43,106,.18); /* pink margin line */
+      pointer-events:none;
+    }
+
+    .dear{
+      font-family: "Brush Script MT", "Segoe Script", "Lucida Handwriting", cursive;
+      font-size: 56px;
+      color: #1f1f1f;
+      margin: 0 0 10px;
+      letter-spacing: .5px;
+    }
+
+    .hand{
+      font-family: "Segoe Script", "Brush Script MT", "Lucida Handwriting", cursive;
+      font-size: 26px;
+      line-height: 1.8;
+      color: #1e1e1e;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .sig{
+      margin-top: 18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+    }
+    .signName{
+      font-family: "Brush Script MT", "Segoe Script", cursive;
+      font-size: 52px;
+      color: #0f6b4f;
+    }
+    .forever{
+      font-weight:900;
+      color:#2b2b2b;
+      opacity:.9;
+    }
+
+    /* Little sparkle */
+    .spark{
+      position:absolute;
+      inset:auto;
+      opacity:.9;
+      font-size:14px;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,.25));
+      animation: twinkle 1.8s ease-in-out infinite;
+    }
+    @keyframes twinkle{
+      0%,100%{ transform: scale(.95); opacity:.65;}
+      50%{ transform: scale(1.08); opacity:1;}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- background floaty emojis -->
+  <div class="floaty" id="floaty"></div>
+
+  <!-- rose petals -->
+  <div class="petals" id="petals"></div>
+
+  <div class="wrap">
+    <div class="card">
+
+      <div class="topbar">
+        <div class="pill"><span class="dot"></span> Purpose Day Surprise — For <b>Nisuuu</b> 💍</div>
+        <div class="pill"><span class="dot dot2"></span> Auto starts on open ✨</div>
+      </div>
+
+      <!-- Screen 1: Countdown -->
+      <section class="screen" id="screenCountdown">
+        <div class="centerBox">
+          <div class="spark" style="top:16px; left:18px;">✨</div>
+          <div class="spark" style="top:22px; right:18px;">💖</div>
+          <div class="spark" style="bottom:14px; left:22px;">🌹</div>
+          <div class="spark" style="bottom:18px; right:22px;">⭐</div>
+
+          <div class="bigNum" id="countNum">10</div>
+          <div class="sub">✨ Wait… something special is coming 💖🌹⭐</div>
+        </div>
+      </section>
+
+      <!-- Screen 2: Sorry text typing -->
+      <section class="screen hidden" id="screenSorry">
+        <div class="sorryWrap">
+          <div class="pill"><span class="dot"></span> Just 5 seconds… 💖</div>
+          <div class="sorryTitle">
+            <span class="typingGlow" id="sorryTyped"></span>
+          </div>
+          <div class="sub">💗🌹⭐</div>
+        </div>
+      </section>
+
+      <!-- Screen 3: Final page -->
+      <section class="screen hidden" id="screenFinal">
+        <div class="finalGrid">
+
+          <div class="panel">
+            <div class="panelHead">
+              <div>
+                Our picture <small>— full photo (no cutting) ✅</small>
+              </div>
+              <div class="badge">For my Nisuuu 💖🌹</div>
+            </div>
+
+            <div class="photoFrame">
+              <div class="photo">
+                <!-- Put your photo in repo root named: couple.jpg -->
+                <img src="couple.jpg" alt="Us" onerror="this.style.display='none'; document.getElementById('photoFallback').style.display='block';">
+                <div class="photoHint">💗 If photo not showing: upload as <b>couple.jpg</b></div>
+                <div id="photoFallback" style="display:none; text-align:center; padding:16px; color:rgba(255,255,255,.85); font-weight:900;">
+                  Photo not found 😅<br/>
+                  Upload your photo in repo root and name it <b>couple.jpg</b>
+                </div>
+              </div>
+            </div>
+
+            <div class="btnRow">
+              <button class="btn" id="openLetterBtn">💌 Open Love Letter</button>
+              <button class="btn secondary" id="morePetalsBtn">🌹 More petals</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panelHead">
+              <div>One line from my heart <small>💖</small></div>
+              <div class="badge">From Pranay ⭐</div>
+            </div>
+            <div class="sideText">
+              <div class="bigLine">A little “purpose wala” I LOVE YOU 💗🌹⭐</div>
+              <div class="mini">
+                Nisuuu, aaj “purpose day” pe bhi aur har din…<br/>
+                <b>I choose you.</b> I love you. I want to marry you. 💍💖
+              </div>
+              <div class="mini">
+                🌹💗⭐<br/>
+                (Letter opens with typing animation — like a real surprise.)
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Letter Modal -->
+  <div class="modal" id="modal">
+    <div class="letter">
+      <div class="letterBar">
+        <div class="letterPill">Purpose Day Letter 💍</div>
+        <button class="closeX" id="closeModal" aria-label="Close">✕</button>
+      </div>
+      <div class="paper">
+        <h2 class="dear">My Nisuuu…</h2>
+        <div class="hand" id="letterTyped"></div>
+
+        <div class="sig">
+          <div>
+            <div class="forever">Forever yours 💚</div>
+            <div class="signName">Pranay</div>
+          </div>
+          <div style="font-weight:900; color:#ff2b6a;">💖🌹⭐</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ---------- Floating emojis background ----------
+  const floaty = document.getElementById('floaty');
+  const floatEmojis = ["💖","💗","💞","💕","🌹","⭐","✨","💍"];
+  for(let i=0;i<26;i++){
+    const s=document.createElement('div');
+    s.className='e';
+    s.textContent = floatEmojis[Math.floor(Math.random()*floatEmojis.length)];
+    s.style.left = Math.random()*100 + "vw";
+    s.style.top = (Math.random()*120 - 10) + "vh";
+    s.style.setProperty('--dx', (Math.random()*160 - 80) + "px");
+    s.style.animationDuration = (10 + Math.random()*14) + "s";
+    s.style.animationDelay = (-Math.random()*18) + "s";
+    s.style.fontSize = (14 + Math.random()*18) + "px";
+    floaty.appendChild(s);
+  }
+
+  // ---------- Rose petals falling ----------
+  const petals = document.getElementById('petals');
+  function spawnPetal(burst=false){
+    const p = document.createElement('div');
+    p.className='petal';
+    // cute rose/petal vibe (emoji)
+    p.textContent = (Math.random()<0.78) ? "🌹" : "💗";
+    p.style.left = Math.random()*100 + "vw";
+    p.style.setProperty('--x', (Math.random()*220 - 110) + "px");
+    p.style.setProperty('--r', (Math.random()*720 - 360) + "deg");
+    p.style.animationDuration = (burst ? (4.5 + Math.random()*2.5) : (6 + Math.random()*6)) + "s";
+    p.style.fontSize = (18 + Math.random()*16) + "px";
+    petals.appendChild(p);
+    p.addEventListener('animationend', ()=> p.remove());
+  }
+  // gentle continuous petals
+  setInterval(()=>spawnPetal(false), 420);
+
+  // burst button
+  document.getElementById('morePetalsBtn').addEventListener('click', ()=>{
+    for(let i=0;i<18;i++) setTimeout(()=>spawnPetal(true), i*55);
+  });
+
+  // ---------- Screens logic (NO split screens) ----------
+  const sCountdown = document.getElementById('screenCountdown');
+  const sSorry = document.getElementById('screenSorry');
+  const sFinal = document.getElementById('screenFinal');
+
+  const countNum = document.getElementById('countNum');
+  let n = 10;
+
+  function show(el){
+    [sCountdown,sSorry,sFinal].forEach(x=>x.classList.add('hidden'));
+    el.classList.remove('hidden');
+  }
+
+  // Countdown starts immediately
+  show(sCountdown);
+  countNum.textContent = n;
+
+  const countdownTimer = setInterval(()=>{
+    n--;
+    if(n <= 0){
+      clearInterval(countdownTimer);
+      // go to sorry screen
+      show(sSorry);
+      startSorryTyping();
+    } else {
+      countNum.textContent = n;
+      // tiny burst every tick
+      spawnPetal(true);
+      spawnPetal(true);
+    }
+  }, 1000);
+
+  // ---------- "SORRY BUT I LOVE YOU" typing glow + 5 sec stay ----------
+  const sorryText = "SORRY BUT I LOVE YOU";
+  const sorryTyped = document.getElementById('sorryTyped');
+
+  function startSorryTyping(){
+    sorryTyped.textContent = "";
+    let i=0;
+    const t = setInterval(()=>{
+      sorryTyped.textContent += sorryText[i] || "";
+      i++;
+      if(i > sorryText.length){
+        clearInterval(t);
+        // stay 5 seconds then final page
+        setTimeout(()=>{
+          show(sFinal);
+          // celebration burst
+          for(let k=0;k<26;k++) setTimeout(()=>spawnPetal(true), k*60);
+        }, 5000);
+      }
+    }, 95);
+  }
+
+  // ---------- Letter modal + typing ----------
+  const modal = document.getElementById('modal');
+  const openLetterBtn = document.getElementById('openLetterBtn');
+  const closeModal = document.getElementById('closeModal');
+  const letterTyped = document.getElementById('letterTyped');
+
+  const letterContent =
+`HAppy purpose day my jaan, my nisuuu, hum to humesa tumko i love you bolte hai par aaj tumko purpose wala i love you bolenge , nisha, jab tumko pehli baar dekhe the tab se tumko pasand karte hai tumko dekhte hi mann me aagya tha  ki i want to marry her, hum tumko observe karte rehte the tumko dekhthe rehte the aur jitna dekhthe the utna pyaar aata tha , dekthe the ki tum kitni jab se alag ho ,ekdam innocent si ,pyaari si , cute si, baachi si, bilkul v aisa nhi laga ki tum badmass tupe hai , par badmass to ho but aachi wali badmasi, tum sabse alag ho ,aise generation me humko itni aachi,loyal,honest ,aur had se jyada khubsusrat partner mili hai , tum mere liye bohot ki hai ,subha uth ke mere liye lunch bana ke lati thi, humko bohot pyyar karti ho tum thank you so much , itna ladai hota humare bich tab v tum mere sath nhi chori , tum bohot aachi hai , isliye hum tumko purpose karna chathe hai , NISHA i love you so much ,HUM TUMSE BOHOT PYAAR KARTE HAI AND YOU HAVE TO MARRY ME 💍💖🌹⭐`;
+
+  let typingInterval = null;
+
+  function typeLetter(){
+    if(typingInterval) clearInterval(typingInterval);
+    letterTyped.textContent = "";
+    let i=0;
+    typingInterval = setInterval(()=>{
+      letterTyped.textContent += letterContent[i] || "";
+      i++;
+      // little petal while typing
+      if(i % 28 === 0) spawnPetal(true);
+      if(i > letterContent.length){
+        clearInterval(typingInterval);
+        typingInterval = null;
+      }
+    }, 14); // speed of typing
+  }
+
+  openLetterBtn.addEventListener('click', ()=>{
+    modal.classList.add('show');
+    typeLetter();
+    // extra petals on open
+    for(let k=0;k<16;k++) setTimeout(()=>spawnPetal(true), k*70);
+  });
+
+  closeModal.addEventListener('click', ()=>{
+    modal.classList.remove('show');
+    if(typingInterval) clearInterval(typingInterval);
+    typingInterval = null;
+  });
+
+  modal.addEventListener('click', (e)=>{
+    if(e.target === modal){
+      modal.classList.remove('show');
+      if(typingInterval) clearInterval(typingInterval);
+      typingInterval = null;
+    }
+  });
+</script>
+</body>
+</html>
